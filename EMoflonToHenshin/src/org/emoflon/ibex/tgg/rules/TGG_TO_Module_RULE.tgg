@@ -1,0 +1,23 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#rule TGG_TO_Module_RULE #with EMoflonToHenshin
+
+#source { 
+	++ tgg: TGG {
+		++ -attributeConstraintDefinitionLibrary -> tggAttrConstrDefLib
+	}
+	
+	++ tggAttrConstrDefLib: TGGAttributeConstraintDefinitionLibrary
+}
+
+#target {
+	++ module: Module
+}
+
+#correspondence {
+	++ tgg2m: TGGToModule {
+		#src->tgg
+		#trg->module
+	}
+}

@@ -1,0 +1,50 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#rule TGGRule_TO_Rule_RULE #with EMoflonToHenshin
+
+#source { 
+	tgg: TGG {
+		++ -rules -> tggRule
+	}
+	
+	++ tggRule: TGGRule {
+		++ -attributeConditionLibrary -> tggAttrConstrLib
+	}
+	
+	++ tggAttrConstrLib: TGGAttributeConstraintLibrary
+}
+
+#target {
+	module: Module {
+		++ -units -> rule
+	}
+	
+	++ rule: Rule {
+		++ -lhs -> lhsG
+		++ -rhs -> rhsG
+	}
+	
+	++ lhsG: Graph {
+		name := "Lhs"
+	}
+	++ rhsG: Graph {
+		name := "Rhs"
+	}
+}
+
+#correspondence {
+	tgg2m: TGGToModule {
+		#src->tgg
+		#trg->module
+	}
+	
+	++ tggR2r: TGGRuleToRule {
+		#src->tggRule
+		#trg->rule
+	}
+}
+
+#attributeConditions {
+	eq_string(tggRule.name, rule.name)
+}

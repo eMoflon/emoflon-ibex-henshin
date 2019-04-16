@@ -1,0 +1,92 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#rule AttrExpr_Attr_Base_RULE #extends AttrExpr_Attr_Abstract #with EMoflonToHenshin
+
+#source {
+	tggRN2: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+}
+
+#target {
+	rule: Rule {
+		-lhs -> graphL
+		++ -parameters -> param
+	}
+	
+	nodeR: Node {
+		++ -attributes -> nodeAttrR
+	}
+	
+	++ nodeAttrR: Attribute {
+		++ -type -> attrTrg
+	}
+	
+	node2R: Node {
+		++ -attributes -> nodeAttr2R
+	}
+	
+	++ nodeAttr2R: Attribute {
+		++ -type -> attrTrg2
+	}
+	
+	graphL: Graph {
+		-nodes -> node2L
+	}
+	
+	node2L: Node {
+		-type -> nodeTypeTrg2
+		++ - attributes -> nodeAttr2L
+	}
+	
+	++ nodeAttr2L: Attribute {
+		++ -type -> attrTrg2
+	}
+	
+	++ param: Parameter {
+		kind := enum::ParameterKind::VAR
+		++ -type -> dataTypeTrg
+	}
+}
+
+#correspondence {
+	tggRN22n2L: TGGRuleNodeToNode {
+		#src->tggRN2
+		#trg->node2L
+	}
+}
+
+#attributeConditions {
+	eq_param(nodeAttrR.value, param.name)
+	eq_param(nodeAttr2R.value, param.name)
+	eq_param(nodeAttr2L.value, param.name)
+}
+
+
+#nac ExistingAttr_Attr_Base_NAC1 #for AttrExpr_Attr_Base_RULE
+#target {
+	nodeR: Node {
+		-attributes -> existingAttrR
+	}
+	
+	existingAttrR: Attribute {
+		-type -> attrTrg
+	}
+	
+	attrTrg: EAttribute
+}
+
+
+#nac ExistingAttr_Attr_Base_NAC2 #for AttrExpr_Attr_Base_RULE
+#target {
+	node2R: Node {
+		-attributes -> existingAttr2R
+	}
+	
+	existingAttr2R: Attribute {
+		-type -> attrTrg2
+	}
+	
+	attrTrg2: EAttribute
+}

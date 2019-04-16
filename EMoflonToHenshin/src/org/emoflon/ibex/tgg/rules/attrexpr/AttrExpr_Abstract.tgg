@@ -1,0 +1,163 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#abstract #rule AttrExpr_Abstract #with EMoflonToHenshin
+
+#source { 
+	tggRule: TGGRule {
+		-nodes -> tggRN
+	}
+	
+	tggRN: TGGRuleNode {
+		-type -> nodeTypeSrc
+		++ - attrExpr -> attrExpr
+	}
+	
+	++ attrExpr: TGGInplaceAttributeExpression {
+		++ -valueExpr -> valueExpr
+		++ -attribute -> attrSrc
+	}
+	
+	++ valueExpr: TGGExpression
+	
+	nodeTypeSrc: EClass {
+		-eAllAttributes -> attrSrc
+	}
+	
+	attrSrc: EAttribute
+}
+
+#target {
+	rule: Rule {
+		-rhs -> graphR
+	}
+	
+	graphR: Graph {
+		-nodes -> nodeR
+	}
+	
+	nodeR: Node {
+		-type -> nodeTypeTrg
+	}
+	
+	nodeTypeTrg: EClass {
+		-eAllAttributes -> attrTrg
+	}
+	
+	attrTrg: EAttribute
+}
+
+#correspondence {
+	tggR2r: TGGRuleToRule {
+		#src->tggRule
+		#trg->rule
+	}
+	
+	tggRN2nR: TGGRuleNodeToNode {
+		#src->tggRN
+		#trg->nodeR
+	}
+}
+
+#attributeConditions {
+	eq_string(attrSrc.name, attrTrg.name)
+}
+
+
+#abstract #rule AttrExpr_Lit_Abstract #extends AttrExpr_Abstract #with EMoflonToHenshin
+
+#source {
+	++ valueExpr: TGGLiteralExpression
+}
+
+
+#abstract #rule AttrExpr_Enum_Abstract #extends AttrExpr_Abstract #with EMoflonToHenshin
+
+#source {
+	++ valueExpr: TGGEnumExpression {
+		++ -eenum -> dataTypeSrc
+		++ -literal -> enumLitSrc
+	}
+	
+	attrSrc: EAttribute {
+		-eAttributeType -> dataTypeSrc
+	}
+	
+	dataTypeSrc: EEnum {
+		-eLiterals -> enumLitSrc
+	}
+	
+	enumLitSrc: EEnumLiteral
+}
+
+
+#abstract #rule AttrExpr_Attr_Abstract #extends AttrExpr_Abstract #with EMoflonToHenshin
+
+#source {
+	tggRN: TGGRuleNode {
+		bindingType == enum::BindingType::CREATE
+	}
+	
+	++ valueExpr: TGGAttributeExpression {
+		++ -objectVar -> tggRN2
+		++ -attribute -> attrSrc2
+	}
+	
+	attrSrc: EAttribute {
+		-eAttributeType -> dataTypeSrc
+	}
+	
+	tggRule: TGGRule {
+		-nodes -> tggRN2
+	}
+	
+	tggRN2: TGGRuleNode {
+		-type -> nodeTypeSrc2
+	}
+	
+	nodeTypeSrc2: EClass {
+		-eAllAttributes -> attrSrc2
+	}
+	
+	attrSrc2: EAttribute {
+		-eAttributeType -> dataTypeSrc
+	}
+	
+	dataTypeSrc: EDataType
+}
+
+#target {
+	graphR: Graph {
+		-nodes -> node2R
+	}
+	
+	node2R: Node {
+		-type -> nodeTypeTrg2
+	}
+	
+	nodeTypeTrg2: EClass {
+		-eAllAttributes -> attrTrg2
+	}
+	
+	attrTrg2: EAttribute {
+		-eAttributeType -> dataTypeTrg
+	}
+	
+	attrTrg: EAttribute {
+		-eAttributeType -> dataTypeTrg
+	}
+	
+	dataTypeTrg: EDataType
+}
+
+#correspondence {
+	tggRN22n2r: TGGRuleNodeToNode {
+		#src->tggRN2
+		#trg->node2R
+	}
+}
+
+#attributeConditions {
+	eq_string(dataTypeSrc.name, dataTypeTrg.name)
+	eq_string(attrSrc2.name, attrTrg2.name)
+}

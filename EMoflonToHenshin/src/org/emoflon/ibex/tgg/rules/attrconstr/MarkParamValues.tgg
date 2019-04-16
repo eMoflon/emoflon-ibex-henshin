@@ -1,0 +1,37 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#rule Mark_ParamValues_AttrExpr #with EMoflonToHenshin
+
+#source { 
+	tggAttrConstrLib: TGGAttributeConstraintLibrary {
+		++ -parameterValues -> tggAttrExpr
+	}
+	
+	++ tggAttrExpr: TGGAttributeExpression {
+		++ -objectVar -> node
+		++ -attribute -> attr
+		++ -parameterDefinition -> tggParamDef
+	}
+	
+	node: TGGRuleNode
+	
+	attr: EAttribute
+	
+	tggParamDef: TGGAttributeConstraintParameterDefinition
+}
+
+
+#rule Mark_ParamValues_LitExpr #with EMoflonToHenshin
+
+#source { 
+	tggAttrConstrLib: TGGAttributeConstraintLibrary {
+		++ -parameterValues -> tggAttrExpr
+	}
+	
+	++ tggAttrExpr: TGGLiteralExpression {
+		++ -parameterDefinition -> tggParamDef
+	}
+	
+	tggParamDef: TGGAttributeConstraintParameterDefinition
+}

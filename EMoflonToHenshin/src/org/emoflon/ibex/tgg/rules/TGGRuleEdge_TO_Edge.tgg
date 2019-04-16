@@ -1,0 +1,274 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#abstract #rule TGGRuleEdge_TO_Edge #with EMoflonToHenshin
+
+#source { 
+	tggRule: TGGRule {
+		-nodes -> tggRN1
+		-nodes -> tggRN2
+		
+		++ -edges -> tggRE
+	}
+	
+	tggRN1: TGGRuleNode {
+		-type -> nodeTypeSrc
+	}
+	
+	tggRN2: TGGRuleNode
+	
+	++ tggRE: TGGRuleEdge {
+		++ -srcNode -> tggRN1
+		++ -trgNode -> tggRN2
+		++ -type -> edgeTypeSrc
+	}
+	
+	nodeTypeSrc: EClass {
+		-eAllReferences -> edgeTypeSrc
+	}
+	
+	edgeTypeSrc: EReference
+}
+
+#target {
+	rule: Rule {
+		-rhs -> graphR
+	}
+	
+	graphR: Graph {
+		-nodes -> n1R
+		-nodes -> n2R
+		
+		++ -edges -> edgeR
+	}
+	
+	n1R: Node {
+		- type -> nodeTypeTrg
+	}
+	
+	n2R: Node
+	
+	++ edgeR: Edge {
+		++ -source -> n1R
+		++ -target -> n2R
+		++ -type -> edgeTypeTrg
+	}
+	
+	nodeTypeTrg: EClass {
+		-eAllReferences -> edgeTypeTrg
+	}
+	
+	edgeTypeTrg: EReference
+}
+
+#correspondence {
+	tggR2r: TGGRuleToRule {
+		#src->tggRule
+		#trg->rule
+	}
+	
+	tggRN12n1R: TGGRuleNodeToNode {
+		#src->tggRN1
+		#trg->n1R
+	}
+	
+	tggRN22n2R: TGGRuleNodeToNode {
+		#src->tggRN2
+		#trg->n2R
+	}
+	
+	++ tggRE2eR: TGGRuleEdgeToEdge {
+		#src->tggRE
+		#trg->edgeR
+	}
+}
+
+#attributeConditions {
+	eq_string(edgeTypeSrc.name, edgeTypeTrg.name)
+}
+
+
+#rule TGGRuleEdge_TO_Edge_Cre_RULE #extends TGGRuleEdge_TO_Edge #with EMoflonToHenshin
+
+#source {
+	++ tggRE: TGGRuleEdge {
+		bindingType  := enum::BindingType::CREATE
+	}
+}
+
+
+#rule TGGRuleEdge_TO_Edge_Con_RULE #extends TGGRuleEdge_TO_Edge #with EMoflonToHenshin
+
+#source {
+	++ tggRE: TGGRuleEdge {
+		bindingType := enum::BindingType::CONTEXT
+	}
+}
+
+#target {
+	rule: Rule {
+		-lhs -> graphL
+	}
+	
+	graphL: Graph {
+		-nodes -> n1L
+		-nodes -> n2L
+		
+		++ -edges -> edgeL
+	}
+	
+	n1L: Node {
+		-type -> nodeTypeTrg
+	}
+	
+	n2L: Node
+	
+	++ edgeL: Edge {
+		++ -source -> n1L
+		++ -target -> n2L
+		++ -type -> edgeTypeTrg
+	}
+}
+
+#correspondence {
+	tggRN12n1L: TGGRuleNodeToNode {
+		#src->tggRN1
+		#trg->n1L
+	}
+	
+	tggRN22n2L: TGGRuleNodeToNode {
+		#src->tggRN2
+		#trg->n2L
+	}
+	
+	++ tggRE2eL: TGGRuleEdgeToEdge {
+		#src->tggRE
+		#trg->edgeL
+	}
+}
+
+
+#abstract #rule TGGRuleEdge_TO_Edge_Circ #with EMoflonToHenshin
+
+#source {
+	tggRule: TGGRule {
+		-nodes -> tggRN
+		++ -edges -> tggRE
+	}
+	
+	tggRN: TGGRuleNode {
+		-type -> nodeTypeSrc
+	}
+	
+	++ tggRE: TGGRuleEdge {
+		++ -srcNode -> tggRN
+		++ -trgNode -> tggRN
+		++ -type -> edgeTypeSrc
+	}
+	
+	nodeTypeSrc: EClass {
+		-eAllReferences -> edgeTypeSrc
+	}
+	
+	edgeTypeSrc: EReference
+}
+
+#target {
+	rule: Rule {
+		-rhs -> graphR
+	}
+	
+	graphR: Graph {
+		-nodes -> nodeR
+		++ -edges -> edgeR
+	}
+	
+	nodeR: Node {
+		-type -> nodeTypeTrg
+	}
+	
+	++ edgeR: Edge {
+		++ -source -> nodeR
+		++ -target -> nodeR
+		++ -type -> edgeTypeTrg
+	}
+	
+	nodeTypeTrg: EClass {
+		-eAllReferences -> edgeTypeTrg
+	}
+	
+	edgeTypeTrg: EReference
+}
+
+#correspondence {
+	tggR2r: TGGRuleToRule {
+		#src->tggRule
+		#trg->rule
+	}
+	
+	tggRN2nR: TGGRuleNodeToNode {
+		#src->tggRN
+		#trg->nodeR
+	}
+	
+	++ tggRE2eR: TGGRuleEdgeToEdge {
+		#src->tggRE
+		#trg->edgeR
+	}
+}
+
+#attributeConditions {
+	eq_string(edgeTypeSrc.name, edgeTypeTrg.name)
+}
+
+
+#rule TGGRuleEdge_TO_Edge_Circ_Cre_RULE #extends TGGRuleEdge_TO_Edge_Circ #with EMoflonToHenshin
+
+#source {
+	++ tggRE: TGGRuleEdge {
+		bindingType := enum::BindingType::CREATE
+	}
+}
+
+
+#rule TGGRuleEdge_TO_Edge_Circ_Con_RULE #extends TGGRuleEdge_TO_Edge_Circ #with EMoflonToHenshin
+
+#source {
+	++ tggRE: TGGRuleEdge {
+		bindingType := enum::BindingType::CONTEXT
+	}
+}
+
+#target {
+	rule: Rule {
+		-lhs -> graphL
+	}
+	
+	graphL: Graph {
+		-nodes -> nodeL
+		++ -edges -> edgeL
+	}
+	
+	nodeL: Node {
+		-type -> nodeTypeTrg
+	}
+	
+	
+	++ edgeL: Edge {
+		++ -source -> nodeL
+		++ -target -> nodeL
+		++ -type -> edgeTypeTrg
+	}
+}
+
+#correspondence {
+	tggRN2nL: TGGRuleNodeToNode {
+		#src->tggRN
+		#trg->nodeL
+	}
+	
+	++ tggRE2eL: TGGRuleEdgeToEdge {
+		#src->tggRE
+		#trg->edgeL
+	}
+}

@@ -1,0 +1,96 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#rule TGGSrc_TO_Imports_RULE #with EMoflonToHenshin
+
+#source { 
+	tgg: TGG {
+		++ -src -> srcPack
+	}
+	
+	srcPack: EPackage
+}
+
+#target {
+	module: Module {
+		++ -imports -> pack
+	}
+	
+	pack: EPackage
+}
+
+#correspondence {
+	tgg2module: TGGToModule {
+		#src->tgg
+		#trg->module
+	}
+}
+
+#attributeConditions {
+	eq_string(srcPack.name, pack.name)
+	eq_string(srcPack.nsPrefix, pack.nsPrefix)
+	eq_string(srcPack.nsURI, pack.nsURI)
+}
+
+
+#rule TGGTrg_TO_Imports_RULE #with EMoflonToHenshin
+
+#source { 
+	tgg: TGG {
+		++ -trg -> trgPack
+	}
+	
+	trgPack: EPackage
+}
+
+#target {
+	module: Module {
+		++ -imports -> pack
+	}
+	
+	pack: EPackage
+}
+
+#correspondence {
+	tgg2module: TGGToModule {
+		#src->tgg
+		#trg->module
+	}
+}
+
+#attributeConditions {
+	eq_string(trgPack.name, pack.name)
+	eq_string(trgPack.nsPrefix, pack.nsPrefix)
+	eq_string(trgPack.nsURI, pack.nsURI)
+}
+
+#rule TGGCorr_TO_Imports_RULE #with EMoflonToHenshin
+
+#source { 
+	tgg: TGG {
+		++ -corr -> corrPack
+	}
+	
+	corrPack: EPackage
+}
+
+#target {
+	module: Module {
+		++ -imports -> pack
+	}
+	
+	pack: EPackage
+}
+
+#correspondence {
+	tgg2module: TGGToModule {
+		#src->tgg
+		#trg->module
+	}
+}
+
+#attributeConditions {
+	eq_string(corrPack.name, pack.name)
+	eq_string(corrPack.nsPrefix, pack.nsPrefix)
+	eq_string(corrPack.nsURI, pack.nsURI)
+}

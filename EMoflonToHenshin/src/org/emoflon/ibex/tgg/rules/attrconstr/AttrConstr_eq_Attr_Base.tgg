@@ -1,0 +1,171 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#rule AttrConstr_eq_Attr_Base_ConCre_RULE #extends AttrConstr_eq_Attr_Base #with EMoflonToHenshin
+
+#source {
+	tggRN1: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+	
+	tggRN2: TGGRuleNode {
+		bindingType == enum::BindingType::CREATE
+	}
+}
+
+#target {
+	graphL: Graph {
+		-nodes -> node1L
+	}
+	
+	node1L: Node {
+		-type -> classTrg1
+		++ -attributes -> nodeAttr1L
+	}
+	
+	++ nodeAttr1L: Attribute {
+		++ -type -> attrTrg1
+	}
+	
+	classTrg1: EClass
+	
+	attrTrg1: EAttribute
+	
+	++ param: Parameter
+}
+
+#correspondence {
+	tggRN12n1L: TGGRuleNodeToNode {
+		#src->tggRN1
+		#trg->node1L
+	}
+}
+
+#attributeConditions {
+	eq_param(nodeAttr1L.value, param.name)
+}
+
+
+#rule AttrConstr_eq_Attr_Base_Con_RULE #extends AttrConstr_eq_Attr_Base #with EMoflonToHenshin
+
+#source {
+	tggRN1: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+	
+	tggRN2: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+}
+
+#target {
+	graphL: Graph {
+		-nodes -> node1L
+		-nodes -> node2L
+	}
+	
+	node1L: Node {
+		-type -> classTrg1
+		++ -attributes -> nodeAttr1L
+	}
+	
+	node2L: Node {
+		-type -> classTrg2
+		++ -attributes -> nodeAttr2L
+	}
+	
+	++ nodeAttr1L: Attribute {
+		++ -type -> attrTrg1
+	}
+	
+	++ nodeAttr2L: Attribute {
+		++ -type -> attrTrg2
+	}
+	
+	classTrg1: EClass
+	
+	classTrg2: EClass
+	
+	attrTrg1: EAttribute
+	
+	attrTrg2: EAttribute
+	
+	++ param: Parameter
+}
+
+#correspondence {
+	tggRN12n1L: TGGRuleNodeToNode {
+		#src->tggRN1
+		#trg->node1L
+	}
+	
+	tggRN22n2L: TGGRuleNodeToNode {
+		#src->tggRN2
+		#trg->node2L
+	}
+}
+
+#attributeConditions {
+	eq_param(nodeAttr1L.value, param.name)
+	eq_param(nodeAttr2L.value, param.name)
+}
+
+
+#nac ExistingAttr_eq_Attr_Base_ConCre_NAC1 #for AttrConstr_eq_Attr_Base_ConCre_RULE
+
+#target {
+	node1R: Node {
+		-attributes -> existingAttr1R
+	}
+	
+	existingAttr1R: Attribute {
+		-type -> attrTrg1
+	}
+	
+	attrTrg1: EAttribute
+}
+
+
+#nac ExistingAttr_eq_Attr_Base_Con_NAC1 #for AttrConstr_eq_Attr_Base_Con_RULE
+
+#target {
+	node1R: Node {
+		-attributes -> existingAttr1R
+	}
+	
+	existingAttr1R: Attribute {
+		-type -> attrTrg1
+	}
+	
+	attrTrg1: EAttribute
+}
+
+
+#nac ExistingAttr_eq_Attr_Base_ConCre_NAC2 #for AttrConstr_eq_Attr_Base_ConCre_RULE
+
+#target {
+	node2R: Node {
+		-attributes -> existingAttr2R
+	}
+	
+	existingAttr2R: Attribute {
+		-type -> attrTrg2
+	}
+	
+	attrTrg2: EAttribute
+}
+
+
+#nac ExistingAttr_eq_Attr_Base_Con_NAC2 #for AttrConstr_eq_Attr_Base_Con_RULE
+
+#target {
+	node2R: Node {
+		-attributes -> existingAttr2R
+	}
+	
+	existingAttr2R: Attribute {
+		-type -> attrTrg2
+	}
+	
+	attrTrg2: EAttribute
+}

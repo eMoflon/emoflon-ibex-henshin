@@ -1,0 +1,176 @@
+
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+// --------------- EClass ---------------
+#rule Mark_EClass_Src_RULE #with EMoflonToHenshin
+#source { 
+	++ eClass: EClass
+}
+
+#rule Mark_EClass_Trg_RULE #with EMoflonToHenshin
+#target {
+	++ eClass: EClass
+}
+
+#rule Mark_EClass_Edge_Src_RULE #with EMoflonToHenshin
+#source { 
+	eReference: EReference {
+		++ -eType -> eClass
+	}
+	eClass: EClass
+}
+
+#rule Mark_EClass_Edge_Trg_RULE #with EMoflonToHenshin
+#target {
+	eReference: EReference {
+		++ -eType -> eClass
+	}
+	eClass: EClass
+}
+
+// -------------- EPackage ---------------
+#rule Mark_EPackage_Src_RULE #with EMoflonToHenshin
+#source {
+	++ ePackage: EPackage
+}
+
+#rule Mark_EPackage_Trg_RULE #with EMoflonToHenshin
+#target {
+	++ ePackage: EPackage
+}
+
+// ------------- EReference --------------
+#rule Mark_EReference_Src_RULE #with EMoflonToHenshin
+#source {
+	++ eReference: EReference
+}
+
+#rule Mark_EReference_Trg_RULE #with EMoflonToHenshin
+#target {
+	++ eReference: EReference
+}
+
+#rule Mark_EReference_Edge_Src_RULE #with EMoflonToHenshin
+#source {
+	eClass: EClass {
+		++ -eAllReferences -> eReference
+	}
+	eReference: EReference
+}
+
+#rule Mark_EReference_Edge_Trg_RULE #with EMoflonToHenshin
+#target {
+	eClass: EClass {
+		++ -eAllReferences -> eReference
+	}
+	eReference: EReference
+}
+
+// ------------- EAttribute --------------
+#rule Mark_EAttribute_Src_RULE #with EMoflonToHenshin
+#source {
+	++ eAttribute: EAttribute
+}
+
+#rule Mark_EAttribute_Trg_RULE #with EMoflonToHenshin
+#target {
+	++ eAttribute: EAttribute
+}
+
+#rule Mark_EAttribute_Edge_Src_RULE #with EMoflonToHenshin
+#source {
+	eClass: EClass {
+		++ -eAllAttributes -> eAttribute
+	}
+	eAttribute: EAttribute
+}
+
+#rule Mark_EAttribute_Edge_Trg_RULE #with EMoflonToHenshin
+#target {
+	eClass: EClass {
+		++ -eAllAttributes -> eAttribute
+	}
+	eAttribute: EAttribute
+}
+
+// -------------- EDataType --------------
+#rule Mark_EDatatype_Src_RULE #with EMoflonToHenshin
+#source {
+	++ eDataType: EDataType
+}
+
+#rule Mark_EDatatype_Trg_RULE #with EMoflonToHenshin
+#target {
+	++ eDataType: EDataType
+}
+
+#rule Mark_EDatatype_Edge_Src_RULE #with EMoflonToHenshin
+#source {
+	eAttribute: EAttribute {
+		++ -eAttributeType -> eDataType
+	}
+	eDataType: EDataType
+}
+
+#rule Mark_EDatatype_Edge_Trg_RULE #with EMoflonToHenshin
+#target {
+	eAttribute: EAttribute {
+		++ -eAttributeType -> eDataType
+	}
+	eDataType: EDataType
+}
+
+// ---------------- EEnum ----------------
+#rule Mark_EEnum_Src_RULE #with EMoflonToHenshin
+#source {
+	++ eEnum: EEnum
+}
+
+#rule Mark_EEnum_Trg_RULE #with EMoflonToHenshin
+#target {
+	++ eEnum: EEnum
+}
+
+#rule Mark_EEnum_Edge_Src_RULE #with EMoflonToHenshin
+#source {
+	eAttribute: EAttribute {
+		++ -eAttributeType -> eEnum
+	}
+	eEnum: EEnum
+}
+
+#rule Mark_EEnum_Edge_Trg_RULE #with EMoflonToHenshin
+#target {
+	eAttribute: EAttribute {
+		++ -eAttributeType -> eEnum
+	}
+	eEnum: EEnum
+}
+
+// ------------ EEnumLiteral -------------
+#rule Mark_EEnumLiteral_Src_RULE #with EMoflonToHenshin
+#source {
+	++ eEnumLiteral: EEnumLiteral
+}
+
+#rule Mark_EEnumLiteral_Trg_RULE #with EMoflonToHenshin
+#target {
+	++ eEnumLiteral: EEnumLiteral
+}
+
+#rule Mark_EEnumLiteral_Edge_Src_RULE #with EMoflonToHenshin
+#source {
+	eEnum: EEnum {
+		++ -eLiterals -> eEnumLiteral
+	}
+	eEnumLiteral: EEnumLiteral
+}
+
+#rule Mark_EEnumLiteral_Edge_Trg_RULE #with EMoflonToHenshin
+#target {
+	eEnum: EEnum {
+		++ -eLiterals -> eEnumLiteral
+	}
+	eEnumLiteral: EEnumLiteral
+}

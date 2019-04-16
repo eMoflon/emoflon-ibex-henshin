@@ -1,0 +1,22 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#rule Mark_TGGAttrConstrDef_RULE #with EMoflonToHenshin
+
+#source { 
+	tggAttrConstrDefLib: TGGAttributeConstraintDefinitionLibrary {
+		++ -tggAttributeConstraintDefinitions -> tggAttrConstrDef
+	}
+	
+	++ tggAttrConstrDef: TGGAttributeConstraintDefinition
+}
+
+#rule Mark_TGGAttrConstrParamDef_RULE #with EMoflonToHenshin
+
+#source { 
+	tggAttrConstrDef: TGGAttributeConstraintDefinition {
+		++ -parameterDefinitions -> tggAttrConstrParamDef
+	}
+	
+	++ tggAttrConstrParamDef: TGGAttributeConstraintParameterDefinition
+}

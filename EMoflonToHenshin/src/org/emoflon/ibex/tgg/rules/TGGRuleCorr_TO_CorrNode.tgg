@@ -1,0 +1,245 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#abstract #rule TGGRuleCorr_TO_CorrNode #with EMoflonToHenshin
+
+#source {
+	tggRule: TGGRule {
+		-nodes -> tggRNsrc
+		-nodes -> tggRNtrg
+		++ - nodes -> tggRC
+	}
+	
+	tggRNsrc: TGGRuleNode {
+		domainType == enum::DomainType::SRC
+	}
+	
+	tggRNtrg: TGGRuleNode {
+		domainType == enum::DomainType::TRG
+	}
+	
+	
+	++ tggRC: TGGRuleCorr {
+		domainType := enum::DomainType::CORR
+		++ -source -> tggRNsrc
+		++ -target -> tggRNtrg
+		++ -type -> typeSrc
+	}
+	
+	typeSrc: EClass
+}
+
+#target {
+	rule: Rule {
+		-rhs -> graphR
+	}
+	
+	graphR: Graph {
+		-nodes -> nodeSrcR
+		-nodes -> nodeTrgR
+		++ -nodes -> nodeCorrR
+		++ -edges -> edgeSrcR
+		++ -edges -> edgeTrgR
+	}
+	
+	nodeSrcR: Node
+	
+	nodeTrgR: Node
+	
+	++ nodeCorrR: Node {
+		++ -type -> typeTrg
+	}
+	
+	++ edgeSrcR: Edge {
+		++ -source -> nodeCorrR
+		++ -target -> nodeSrcR
+		++ -type -> edgeTypeSrc
+	}
+	
+	++ edgeTrgR: Edge {
+		++ -source -> nodeCorrR
+		++ -target -> nodeTrgR
+		++ -type -> edgeTypeTrg
+	}
+	
+	typeTrg: EClass {
+		-eAllReferences -> edgeTypeSrc
+		-eAllReferences -> edgeTypeTrg
+	}
+	
+	edgeTypeSrc: EReference {
+		name == "source"
+	}
+	
+	edgeTypeTrg: EReference {
+		name == "target"
+	}
+}
+
+#correspondence {
+	tggR2rR: TGGRuleToRule {
+		#src->tggRule
+		#trg->rule
+	}
+	
+	tggRNsrc2nSrcR: TGGRuleNodeToNode {
+		#src->tggRNsrc
+		#trg->nodeSrcR
+	}
+	
+	tggRNtrg2nTrgR: TGGRuleNodeToNode {
+		#src->tggRNtrg
+		#trg->nodeTrgR
+	}
+	
+	++ tggRC2nCorrR: TGGRuleCorrToCorrNode {
+		#src->tggRC
+		#trg->nodeCorrR
+	}
+}
+
+#attributeConditions {
+	eq_string(tggRC.name, nodeCorrR.name)
+	eq_string(typeSrc.name, typeTrg.name)
+}
+
+
+#rule TGGRuleCorr_TO_CorrNode_Cre_RULE #extends TGGRuleCorr_TO_CorrNode #with EMoflonToHenshin
+
+#source {
+	tggRNsrc: TGGRuleNode {
+		bindingType == enum::BindingType::CREATE
+	}
+	
+	tggRNtrg: TGGRuleNode {
+		bindingType == enum::BindingType::CREATE
+	}
+	
+	++ tggRC: TGGRuleCorr {
+		bindingType := enum::BindingType::CREATE
+	}
+}
+
+
+#rule TGGRuleCorr_TO_CorrNode_SrcCre_RULE #extends TGGRuleCorr_TO_CorrNode #with EMoflonToHenshin
+
+#source {
+	tggRNsrc: TGGRuleNode {
+		bindingType == enum::BindingType::CREATE
+	}
+	
+	tggRNtrg: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+	
+	++ tggRC: TGGRuleCorr {
+		bindingType := enum::BindingType::CREATE
+	}
+}
+
+
+#rule TGGRuleCorr_TO_CorrNode_TrgCre_RULE #extends TGGRuleCorr_TO_CorrNode #with EMoflonToHenshin
+
+#source {
+	tggRNsrc: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+	
+	tggRNtrg: TGGRuleNode {
+		bindingType == enum::BindingType::CREATE
+	}
+	
+	++ tggRC: TGGRuleCorr {
+		bindingType := enum::BindingType::CREATE
+	}
+}
+
+
+#rule TGGRuleCorr_TO_CorrNode_Con_RULE #extends TGGRuleCorr_TO_CorrNode #with EMoflonToHenshin
+
+#source {
+	tggRNsrc: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+	
+	tggRNtrg: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+	
+	++ tggRC: TGGRuleCorr {
+		bindingType := enum::BindingType::CONTEXT
+	}
+}
+
+#target {
+	rule: Rule {
+		-lhs -> graphL
+		-mappings -> mappingSrc
+		-mappings -> mappingTrg
+		++ -mappings -> mappingCorr
+	}
+	
+	graphL: Graph {
+		-nodes -> nodeSrcL
+		-nodes -> nodeTrgL
+		++ -nodes -> nodeCorrL
+		++ -edges -> edgeSrcL
+		++ -edges -> edgeTrgL
+	}
+	
+	nodeSrcL: Node
+	
+	nodeTrgL: Node
+	
+	++ nodeCorrL: Node {
+		++ -type -> typeTrg
+	}
+	
+	++ edgeSrcL: Edge {
+		++ -source -> nodeCorrL
+		++ -target -> nodeSrcL
+		++ -type -> edgeTypeSrc
+	}
+	
+	++ edgeTrgL: Edge {
+		++ -source -> nodeCorrL
+		++ -target -> nodeTrgL
+		++ -type -> edgeTypeTrg
+	}
+	
+	mappingSrc: Mapping {
+		-origin -> nodeSrcL
+		-image -> nodeSrcR
+	}
+	
+	mappingTrg: Mapping {
+		-origin -> nodeTrgL
+		-image -> nodeTrgR
+	}
+	
+	++ mappingCorr: Mapping {
+		++ -origin -> nodeCorrL
+		++ -image -> nodeCorrR
+	}
+}
+
+#correspondence {
+	tggRNsrc2nSrcL: TGGRuleNodeToNode {
+		#src->tggRNsrc
+		#trg->nodeSrcL
+	}
+	
+	tggRNtrg2nTrgL: TGGRuleNodeToNode {
+		#src->tggRNtrg
+		#trg->nodeTrgL
+	}
+	
+	++ tggRC2nCorrL: TGGRuleCorrToCorrNode {
+		#src->tggRC
+		#trg->nodeCorrL
+	}
+}
+
+#attributeConditions {
+	eq_string(tggRC.name, nodeCorrL.name)
+}

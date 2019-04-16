@@ -1,0 +1,99 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#abstract #rule TGGRuleNode_TO_Node #with EMoflonToHenshin
+
+#source {	
+	tggRule: TGGRule {
+		++ -nodes -> tggRuleNode
+	}
+	
+	++ tggRuleNode: TGGRuleNode {
+		++ -type -> typeSrc
+	}
+	
+	typeSrc: EClass
+}
+
+#target {
+	rule: Rule {
+		-rhs -> rhsG
+	}
+	
+	rhsG: Graph {
+		++ -nodes -> nodeR
+	}
+	
+	++ nodeR: Node {
+		++ -type -> typeTrg
+	}
+	
+	typeTrg: EClass
+}
+
+#correspondence {
+	tggR2r: TGGRuleToRule {
+		#src->tggRule
+		#trg->rule
+	}
+	
+	++ tggRN2nR: TGGRuleNodeToNode {
+		#src->tggRuleNode
+		#trg->nodeR
+	}
+}
+
+#attributeConditions {
+	eq_string(tggRuleNode.name, nodeR.name)
+	eq_string(typeSrc.name, typeTrg.name)
+}
+
+
+#rule TGGRuleNode_TO_Node_Cre_RULE #extends TGGRuleNode_TO_Node #with EMoflonToHenshin
+
+#source {
+	++ tggRuleNode: TGGRuleNode {
+		bindingType := enum::BindingType::CREATE
+	}
+}
+
+
+#rule TGGRuleNode_TO_Node_Con_RULE #extends TGGRuleNode_TO_Node #with EMoflonToHenshin
+
+#source {
+	++ tggRuleNode: TGGRuleNode {
+		bindingType := enum::BindingType::CONTEXT
+	}
+}
+
+#target {
+	rule: Rule {
+		-lhs -> lhsG
+		
+		++ -mappings -> mapping
+	}
+	
+	lhsG: Graph {
+		++ -nodes -> nodeL
+	}
+	
+	++ nodeL: Node {
+		++ -type -> typeTrg
+	}
+	
+	++ mapping: Mapping {
+		++ -origin -> nodeL
+		++ -image -> nodeR
+	}
+}
+
+#correspondence {
+	++ tggRN2nL: TGGRuleNodeToNode {
+		#src->tggRuleNode
+		#trg->nodeL
+	}
+}
+
+#attributeConditions {
+	eq_string(tggRuleNode.name, nodeL.name)
+}

@@ -1,0 +1,86 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#rule NACEdge_TO_ForbidEdge_RULE #with EMoflonToHenshin
+
+#source {
+	nac: NAC {
+		-nodes -> tggRN1
+		-nodes -> tggRN2
+		++ -edges -> tggRE
+	}
+	
+	tggRN1: TGGRuleNode {
+		-type -> nodeTypeSrc
+	}
+	
+	tggRN2: TGGRuleNode
+	
+	++ tggRE: TGGRuleEdge {
+		++ -srcNode -> tggRN1
+		++ -trgNode -> tggRN2
+		++ -type -> edgeTypeSrc
+	}
+	
+	nodeTypeSrc: EClass {
+		-eAllReferences -> edgeTypeSrc
+	}
+	
+	edgeTypeSrc: EReference
+}
+
+#target {
+	nestedCond: NestedCondition {
+		-conclusion -> nacGraph
+	}
+	
+	nacGraph: Graph {
+		-nodes -> node1
+		-nodes -> node2
+		++ -edges -> edge
+	}
+	
+	node1: Node {
+		-type -> nodeTypeTrg
+	}
+	
+	node2: Node
+	
+	++ edge: Edge {
+		++ -source -> node1
+		++ -target -> node2
+		++ -type -> edgeTypeTrg
+	}
+	
+	nodeTypeTrg: EClass {
+		-eAllReferences -> edgeTypeTrg
+	}
+	
+	edgeTypeTrg: EReference
+}
+
+#correspondence {
+	nac2NestedCond: NACToNestedCond {
+		#src->nac
+		#trg->nestedCond
+	}
+	
+	tggRN2n1: TGGRuleNodeToNode {
+		#src->tggRN1
+		#trg->node1
+	}
+	
+	tggRN2n2: TGGRuleNodeToNode {
+		#src->tggRN2
+		#trg->node2
+	}
+	
+	++ tggRE2e: TGGRuleEdgeToEdge {
+		#src->tggRE
+		#trg->edge
+	}
+}
+
+#attributeConditions {
+	eq_string(edgeTypeSrc.name, edgeTypeTrg.name)
+}

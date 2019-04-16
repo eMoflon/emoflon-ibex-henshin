@@ -1,0 +1,202 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#abstract #rule AttrExpr_Attr_Ext_ExistSub #extends AttrExpr_Attr_Abstract #with EMoflonToHenshin
+
+#target {
+	rule: Rule {
+		-parameters -> param
+	}
+	
+	param: Parameter {
+		kind == enum::ParameterKind::VAR
+		-type -> dataTypeTrg
+	}
+	
+	nodeR: Node {
+		-attributes -> nodeAttrR
+	}
+	
+	nodeAttrR: Attribute {
+		-type -> attrTrg
+	}
+	
+	node2R: Node {
+		++ -attributes -> nodeAttr2R
+	}
+	
+	++ nodeAttr2R: Attribute {
+		++ -type -> attrTrg2
+	}
+}
+
+#attributeConditions {
+	eq_param(nodeAttrR.value, param.name)
+	eq_param(nodeAttr2R.value, param.name)
+}
+
+
+#rule AttrExpr_Attr_Ext_ExistSub_CreObj_RULE #extends AttrExpr_Attr_Ext_ExistSub #with EMoflonToHenshin
+
+#source {
+	tggRN2: TGGRuleNode {
+		bindingType == enum::BindingType::CREATE
+	}
+}
+
+
+#rule AttrExpr_Attr_Ext_ExistSub_ConObj_RULE #extends AttrExpr_Attr_Ext_ExistSub #with EMoflonToHenshin
+
+#source {
+	tggRN2: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+}
+
+#target {
+	rule: Rule {
+		-lhs -> graphL
+	}
+	
+	graphL: Graph {
+		-nodes -> node2L
+	}
+	
+	node2L: Node {
+		-type -> nodeTypeTrg2
+		++ - attributes -> nodeAttr2L
+	}
+	
+	++ nodeAttr2L: Attribute {
+		++ -type -> attrTrg2
+	}
+	
+	nodeTypeTrg2: EClass
+	
+	attrTrg2: EAttribute
+	
+	param: Parameter
+}
+
+#correspondence {
+	tggRN22n2L: TGGRuleNodeToNode {
+		#src->tggRN2
+		#trg->node2L
+	}
+}
+
+#attributeConditions {
+	eq_param(nodeAttr2L.value, param.name)
+}
+
+
+#rule AttrExpr_Attr_Ext_ExistObj_RULE #extends AttrExpr_Attr_Abstract #with EMoflonToHenshin
+
+#target {
+	rule: Rule {
+		-parameters -> param
+	}
+	
+	param: Parameter {
+		kind == enum::ParameterKind::VAR
+		-type -> dataTypeTrg
+	}
+	
+	nodeR: Node {
+		++ -attributes -> nodeAttrR
+	}
+	
+	++ nodeAttrR: Attribute {
+		++ -type -> attrTrg
+	}
+	
+	node2R: Node {
+		-attributes -> nodeAttr2R
+	}
+	
+	nodeAttr2R: Attribute {
+		-type -> attrTrg2
+	}
+}
+
+#attributeConditions {
+	eq_param(nodeAttrR.value, param.name)
+	eq_param(nodeAttr2R.value, param.name)
+}
+
+
+#rule AttrExpr_Attr_Ext_ExistBoth_RULE #extends AttrExpr_Attr_Abstract #with EMoflonToHenshin
+
+#target {
+	rule: Rule {
+		-parameters -> param
+	}
+	
+	param: Parameter {
+		kind == enum::ParameterKind::VAR
+		-type -> dataTypeTrg
+	}
+	
+	nodeR: Node {
+		-attributes -> nodeAttrR
+	}
+	
+	nodeAttrR: Attribute {
+		-type -> attrTrg
+	}
+	
+	node2R: Node {
+		-attributes -> nodeAttr2R
+	}
+	
+	nodeAttr2R: Attribute {
+		-type -> attrTrg2
+	}
+}
+
+#attributeConditions {
+	eq_param(nodeAttrR.value, param.name)
+	eq_param(nodeAttr2R.value, param.name)
+}
+
+
+#nac ExistingAttr_Attr_Ext_ExistSub_CreObj_NAC #for AttrExpr_Attr_Ext_ExistSub_CreObj_RULE
+#target {
+	node2R: Node {
+		-attributes -> existingAttr2R
+	}
+	
+	existingAttr2R: Attribute {
+		-type -> attrTrg2
+	}
+	
+	attrTrg2: EAttribute
+}
+
+
+#nac ExistingAttr_Attr_Ext_ExistSub_ConObj_NAC #for AttrExpr_Attr_Ext_ExistSub_ConObj_RULE
+#target {
+	node2R: Node {
+		-attributes -> existingAttr2R
+	}
+	
+	existingAttr2R: Attribute {
+		-type -> attrTrg2
+	}
+	
+	attrTrg2: EAttribute
+}
+
+
+#nac ExistingAttr_Attr_Ext_ExistObj_NAC #for AttrExpr_Attr_Ext_ExistObj_RULE
+#target {
+	nodeR: Node {
+		-attributes -> existingAttrR
+	}
+	
+	existingAttrR: Attribute {
+		-type -> attrTrg
+	}
+	
+	attrTrg: EAttribute
+}

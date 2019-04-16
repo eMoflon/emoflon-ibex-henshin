@@ -1,0 +1,44 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#rule NAC_TO_NestedCond_RULE #with EMoflonToHenshin
+
+#source { 
+	tggRule: TGGRule {
+		++ -nacs -> nac
+	}
+	
+	++ nac: NAC
+}
+
+#target {
+	rule: Rule {
+		-lhs -> graphL
+	}
+	
+	graphL: Graph {
+		++ -formula -> not
+	}
+	
+	++ not: Not {
+		++ -child -> nestedCond
+	}
+	
+	++ nestedCond: NestedCondition {
+		++ -conclusion -> nacGraph
+	}
+	
+	++ nacGraph: Graph
+}
+
+#correspondence {
+	tggR2r: TGGRuleToRule {
+		#src->tggRule
+		#trg->rule
+	}
+	
+	++ nac2NestedCond: NACToNestedCond {
+		#src->nac
+		#trg->nestedCond
+	}
+}

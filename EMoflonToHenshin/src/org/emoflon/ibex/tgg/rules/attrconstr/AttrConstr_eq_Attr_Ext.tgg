@@ -1,0 +1,146 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#abstract #rule AttrConstr_eq_Attr_Ext_ExistOne #extends AttrConstr_eq_Attr_Ext #with EMoflonToHenshin
+
+#target {
+	node1R: Node {
+		-attributes -> nodeAttr1R
+	}
+	
+	nodeAttr1R: Attribute {
+		-type -> attrTrg1
+	}
+	
+	attrTrg1: EAttribute
+	
+	node2R: Node {
+		++ -attributes -> nodeAttr2R
+	}
+	
+	++ nodeAttr2R: Attribute {
+		++ -type -> attrTrg2
+	}
+	
+	attrTrg2: EAttribute
+	
+	param: Parameter
+}
+
+#attributeConditions {
+	eq_param(nodeAttr1R.value, param.name)
+	eq_param(nodeAttr2R.value, param.name)
+}
+
+
+#rule AttrConstr_eq_Attr_Ext_ExistOne_Cre_RULE #extends AttrConstr_eq_Attr_Ext_ExistOne #with EMoflonToHenshin
+
+#source {	
+	tggRN2: TGGRuleNode {
+		bindingType == enum::BindingType::CREATE
+	}
+}
+
+
+#rule AttrConstr_eq_Attr_Ext_ExistOne_Con_RULE #extends AttrConstr_eq_Attr_Ext_ExistOne #with EMoflonToHenshin
+
+#source {
+	tggRN2: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+}
+
+#target {
+	graphL: Graph {
+		-nodes -> node2L
+	}
+	
+	node2L: Node {
+		-type -> classTrg2
+		++ -attributes -> nodeAttr2L
+	}
+	
+	classTrg2: EClass
+	
+	++ nodeAttr2L: Attribute {
+		++ -type -> attrTrg2
+	}
+	
+	param: Parameter
+}
+
+#correspondence {
+	tggRN22n2L: TGGRuleNodeToNode {
+		#src->tggRN2
+		#trg->node2L
+	}
+}
+
+#attributeConditions {
+	eq_param(nodeAttr2L.value, param.name)
+}
+
+
+#rule AttrConstr_eq_Attr_Ext_ExistBoth_RULE #extends AttrConstr_eq_Attr_Ext #with EMoflonToHenshin
+
+#target {
+	
+	node1R: Node {
+		-attributes -> nodeAttr1R
+	}
+	
+	nodeAttr1R: Attribute {
+		-type -> attrTrg1
+	}
+	
+	attrTrg1: EAttribute
+	
+	node2R: Node {
+		-attributes -> nodeAttr2R
+	}
+	
+	nodeAttr2R: Attribute {
+		-type -> attrTrg2
+	}
+	
+	attrTrg2: EAttribute
+	
+	param: Parameter
+	
+	dataTypeTrg: EDataType
+}
+
+#attributeConditions {
+	eq_param(nodeAttr1R.value, param.name)
+	eq_param(nodeAttr2R.value, param.name)
+}
+
+
+#nac ExistingAttr_eq_Attr_Ext_ExistOne_Cre_NAC #for AttrConstr_eq_Attr_Ext_ExistOne_Cre_RULE
+
+#target {
+	node2R: Node {
+		-attributes -> existingAttr2R
+	}
+	
+	existingAttr2R: Attribute {
+		-type -> attrTrg2
+	}
+	
+	attrTrg2: EAttribute
+}
+
+
+#nac ExistingAttr_eq_Attr_Ext_ExistOne_Con_NAC #for AttrConstr_eq_Attr_Ext_ExistOne_Con_RULE
+
+#target {
+	node2R: Node {
+		-attributes -> existingAttr2R
+	}
+	
+	existingAttr2R: Attribute {
+		-type -> attrTrg2
+	}
+	
+	attrTrg2: EAttribute
+}

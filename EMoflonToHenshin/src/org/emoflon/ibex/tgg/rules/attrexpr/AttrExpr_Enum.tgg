@@ -1,0 +1,276 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#abstract #rule AttrExpr_Enum_eq #extends AttrExpr_Enum_Abstract #with EMoflonToHenshin
+
+#source {	
+	++ attrExpr: TGGInplaceAttributeExpression {
+		operator := enum::TGGAttributeConstraintOperators::EQUAL
+	}
+	
+	enumLitSrc: EEnumLiteral
+}
+
+#target {
+	nodeR: Node {
+		++ -attributes -> nodeAttrR
+	}
+	
+	++ nodeAttrR: Attribute {
+		++ -type -> attrTrg
+	}
+	
+	attrTrg: EAttribute
+}
+
+#attributeConditions {
+	surround_with_quotes(enumLitSrc.literal, nodeAttrR.value)
+}
+
+
+#rule AttrExpr_Enum_eq_Cre_RULE #extends AttrExpr_Enum_eq #with EMoflonToHenshin
+
+#source {
+	tggRN: TGGRuleNode {
+		bindingType == enum::BindingType::CREATE
+	}
+}
+
+
+#rule AttrExpr_Enum_eq_Con_RULE #extends AttrExpr_Enum_eq #with EMoflonToHenshin
+
+#source {
+	tggRN: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+	
+	enumLitSrc: EEnumLiteral
+}
+
+#target {
+	rule: Rule {
+		-lhs -> graphL
+	}
+	
+	graphL: Graph {
+		-nodes -> nodeL
+	}
+	
+	nodeL: Node {
+		-type -> nodeTypeTrg
+		++ -attributes -> nodeAttrL
+	}
+	
+	++ nodeAttrL: Attribute {
+		++ -type -> attrTrg
+	}
+	
+	nodeTypeTrg: EClass
+}
+
+#correspondence {
+	tggRN2nL: TGGRuleNodeToNode {
+		#src->tggRN
+		#trg->nodeL
+	}
+}
+
+#attributeConditions {
+	surround_with_quotes(enumLitSrc.literal, nodeAttrL.value)
+}
+
+
+#abstract #rule AttrExpr_Enum_other #extends AttrExpr_Enum_Abstract #with EMoflonToHenshin
+
+#source {
+	++ attrExpr: TGGInplaceAttributeExpression {
+		operator != enum::TGGAttributeConstraintOperators::EQUAL
+	}
+	
+	enumLitSrc: EEnumLiteral
+}
+
+#target {
+	attrTrg: EAttribute {
+		-eAttributeType -> dataTypeTrg
+	}
+	
+	dataTypeTrg: EDataType
+	
+	rule: Rule {
+		++ -attributeConditions -> attrCond
+		++ -parameters -> param
+	}
+	
+	nodeR: Node {
+		++ -attributes -> nodeAttrR
+	}
+	
+	++ nodeAttrR: Attribute {
+		++ -type -> attrTrg
+	}
+	
+	++ param: Parameter {
+		kind := enum::ParameterKind::VAR
+		++ -type -> dataTypeTrg
+	}
+	
+	++ attrCond: AttributeCondition
+}
+
+#attributeConditions {
+	eq_param(nodeAttrR.value, param.name)
+	cond_text_enum(param.name, attrExpr.operator, enumLitSrc.literal, attrCond.conditionText)
+}
+
+
+#rule AttrExpr_Enum_other_Cre_RULE #extends AttrExpr_Enum_other #with EMoflonToHenshin
+
+#source {
+	tggRN: TGGRuleNode {
+		bindingType == enum::BindingType::CREATE
+	}
+}
+
+
+#rule AttrExpr_Enum_other_Con_RULE #extends AttrExpr_Enum_other #with EMoflonToHenshin
+
+#source {
+	tggRN: TGGRuleNode {
+		bindingType == enum::BindingType::CONTEXT
+	}
+}
+
+#target {
+	graphL: Graph {
+		-nodes -> nodeL
+	}
+	
+	rule: Rule {
+		-lhs -> graphL
+	}
+	
+	nodeL: Node {
+		-type -> nodeTypeTrg
+		++ -attributes -> nodeAttrL
+	}
+	
+	++ nodeAttrL: Attribute {
+		++ - type -> attrTrg
+	}
+	
+	nodeTypeTrg: EClass
+	++ param: Parameter
+}
+
+#correspondence {
+	tggRN2nL: TGGRuleNodeToNode {
+		#src->tggRN
+		#trg->nodeL
+	}
+}
+
+#attributeConditions {
+	eq_param(nodeAttrL.value, param.name)
+}
+
+
+#rule AttrExpr_Enum_ExistAttr_RULE #extends AttrExpr_Enum_Abstract #with EMoflonToHenshin
+
+#source {
+	++ attrExpr: TGGInplaceAttributeExpression
+	
+	enumLitSrc: EEnumLiteral
+	
+	dataTypeSrc: EEnum
+}
+
+#target {
+	attrTrg: EAttribute {
+		-eAttributeType -> dataTypeTrg
+	}
+	
+	dataTypeTrg: EEnum
+	
+	rule: Rule {
+		-parameters -> param
+		++ -attributeConditions -> attrCond
+	}
+	
+	nodeR: Node {
+		-attributes -> nodeAttrR
+	}
+	
+	nodeAttrR: Attribute {
+		-type -> attrTrg
+	}
+	
+	param: Parameter {
+		kind == enum::ParameterKind::VAR
+		-type -> dataTypeTrg
+	}
+	
+	++ attrCond: AttributeCondition
+}
+
+#attributeConditions {
+	eq_string(dataTypeSrc.name, dataTypeTrg.name)
+	eq_param(nodeAttrR.value, param.name)
+	cond_text_enum(param.name, attrExpr.operator, enumLitSrc.literal, attrCond.conditionText)
+}
+
+
+#nac ExistingAttr_Enum_eq_Cre_NAC #for AttrExpr_Enum_eq_Cre_RULE
+#target {
+	nodeR: Node {
+		-attributes -> existingAttrR
+	}
+	
+	existingAttrR: Attribute {
+		-type -> attrTrg
+	}
+	
+	attrTrg: EAttribute
+}
+
+
+#nac ExistingAttr_Enum_eq_Con_NAC #for AttrExpr_Enum_eq_Con_RULE
+#target {
+	nodeR: Node {
+		-attributes -> existingAttrR
+	}
+	
+	existingAttrR: Attribute {
+		-type -> attrTrg
+	}
+	
+	attrTrg: EAttribute
+}
+
+
+#nac ExistingAttr_Enum_other_Cre_NAC #for AttrExpr_Enum_other_Cre_RULE
+#target {
+	nodeR: Node {
+		-attributes -> existingAttrR
+	}
+	
+	existingAttrR: Attribute {
+		-type -> attrTrg
+	}
+	
+	attrTrg: EAttribute
+}
+
+
+#nac ExistingAttr_Enum_other_Con_NAC #for AttrExpr_Enum_other_Con_RULE
+#target {
+	nodeR: Node {
+		-attributes -> existingAttrR
+	}
+	
+	existingAttrR: Attribute {
+		-type -> attrTrg
+	}
+	
+	attrTrg: EAttribute
+}

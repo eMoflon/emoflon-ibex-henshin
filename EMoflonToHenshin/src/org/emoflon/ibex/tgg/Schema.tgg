@@ -1,0 +1,92 @@
+#import "platform:/plugin/org.emoflon.ibex.tgg.core.language/model/Language.ecore"
+#import "platform:/resource/org.eclipse.emf.henshin.model/model/henshin.ecore"
+#import "http://www.eclipse.org/emf/2002/Ecore"
+
+#schema EMoflonToHenshin
+	
+#source {
+	language
+	ecore
+}
+
+#target {
+	henshin
+	ecore
+} 
+
+#correspondence {
+	TGGNamedElemToNamedElem {
+		#src->TGGNamedElement
+		#trg->NamedElement
+	}
+	
+	TGGToModule {
+		#src->TGG
+		#trg->Module
+	}
+	
+	TGGRuleToRule {
+		#src->TGGRule
+		#trg->Rule
+	}
+	
+	TGGRuleNodeToNode {
+		#src->TGGRuleNode
+		#trg->Node
+	}
+	
+	TGGRuleEdgeToEdge {
+		#src->TGGRuleEdge
+		#trg->Edge
+	}
+	
+	TGGRuleCorrToCorrNode {
+		#src->TGGRuleCorr
+		#trg->Node
+	}
+
+	NACToNestedCond {
+		#src->NAC
+		#trg->NestedCondition
+	}
+}
+
+#attributeConditions {
+	#userDefined
+	cond_text(param: EString, 
+		op: TGGAttributeConstraintOperators, 
+		val: EString, 
+		condText: EString
+	) {
+		#sync: [B B B B], [F B B B], [B F B B], [F F B B], [B B F B], [F B F B], [B F F B], [F F F B], [B B B F], [F B B F]
+		#gen: [B B B B], [F B B B], [B F B B], [F F B B], [B B F B], [F B F B], [B F F B], [F F F B], [B B B F], [F B B F]
+	}
+	
+	#userDefined
+	cond_text_enum(param: EString, 
+		op: TGGAttributeConstraintOperators, 
+		val: EString, 
+		condText: EString
+	) {
+		#sync: [B B B B], [F B B B], [B F B B], [F F B B], [B B F B], [F B F B], [B F F B], [F F F B], [B B B F], [F B B F]
+		#gen: [B B B B], [F B B B], [B F B B], [F F B B], [B B F B], [F B F B], [B F F B], [F F F B], [B B B F], [F B B F]
+	}
+	
+	#userDefined
+	eq_param(attrVal: EString, paramName: EString) {
+		#sync: [B B], [F B], [F F]
+		#gen: [B B], [F B], [F F]
+	}
+	
+	#userDefined
+	surround_with_quotes(word: EString, result: EString) {
+		#sync: [B B], [B F], [F B]
+		#gen: [B B], [B F], [F B]
+	}
+	
+	#userDefined
+	contains(word: EString, sequence: EString) {
+		#sync: [B B]
+		#gen: [B B]
+	}
+}

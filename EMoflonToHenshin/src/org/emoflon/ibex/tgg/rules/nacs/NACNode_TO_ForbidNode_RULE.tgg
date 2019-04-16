@@ -1,0 +1,93 @@
+#using EMoflonToHenshin.*
+#using AttrCondDefLibrary.*
+
+#rule NACNode_TO_ForbidNode_RULE #with EMoflonToHenshin
+
+#source { 
+	nac: NAC {
+		++ -nodes -> tggRN
+	}
+	
+	++ tggRN: TGGRuleNode {
+		++ -type -> typeSrc
+	}
+	
+	typeSrc: EClass
+}
+
+#target {
+	nestedCond: NestedCondition {
+		-conclusion -> nacGraph
+	}
+	
+	nacGraph: Graph {
+		++ -nodes -> node
+	}
+	
+	++ node: Node {
+		++ -type -> typeTrg
+		
+	}
+	
+	typeTrg: EClass
+}
+
+#correspondence {
+	nac2NestedCond: NACToNestedCond {
+		#src->nac
+		#trg->nestedCond
+	}
+	
+	++ tggRN2n: TGGRuleNodeToNode {
+		#src->tggRN
+		#trg->node
+	}
+}
+
+#attributeConditions {
+	eq_string(tggRN.name, node.name)
+	eq_string(typeSrc.name, typeTrg.name)
+}
+
+
+
+#complement nodeMapping #for NACNode_TO_ForbidNode_RULE
+
+#source {
+	tggRule: TGGRule {
+		-nacs -> nac
+		-nodes -> tggRNOrig
+	}
+	
+	tggRNOrig: TGGRuleNode
+	
+	tggRN: TGGRuleNode
+	
+	nac: NAC
+}
+
+#target {
+	nodeOrig: Node
+	
+	nestedCond: NestedCondition {
+		++ -mappings -> mapping
+	}
+	
+	++ mapping: Mapping {
+		++ -origin -> nodeOrig
+		++ -image -> node
+	}
+	
+	node: Node
+}
+
+#correspondence {
+	tggRN2n: TGGRuleNodeToNode {
+		#src->tggRNOrig
+		#trg->nodeOrig
+	}
+}
+
+#attributeConditions {
+	eq_string(tggRNOrig.name, tggRN.name)
+}
