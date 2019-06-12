@@ -9,6 +9,8 @@ import org.emoflon.ibex.tgg.operational.csp.constraints.factories.emoflontohensh
 import org.emoflon.ibex.tgg.operational.defaults.IbexOptions;
 import org.emoflon.ibex.tgg.operational.strategies.OperationalStrategy;
 
+import EMoflonToHenshin.EMoflonToHenshinPackage;
+import EMoflonToHenshin.impl.EMoflonToHenshinPackageImpl;
 import language.impl.LanguagePackageImpl;
 
 public class _RegistrationHelper {
@@ -23,6 +25,12 @@ public class _RegistrationHelper {
 		rs.getPackageRegistry().put("platform:/resource/org.emoflon.ibex.tgg.core.language/model/Language.ecore",
 				LanguagePackageImpl.eINSTANCE);
 		rs.getPackageRegistry().put("http://www.eclipse.org/emf/2002/Ecore", EcorePackageImpl.eINSTANCE);
+		
+		EMoflonToHenshinPackageImpl.init();
+		
+		rs.getPackageRegistry().put("platform:/resource/FeatureModelConciseToSafe/model/FeatureModelConciseToSafe.ecore", EMoflonToHenshinPackage.eINSTANCE);
+		rs.getPackageRegistry().put("platform:/plugin/FeatureModelConciseToSafe/model/FeatureModelConciseToSafe.ecore", EMoflonToHenshinPackage.eINSTANCE);
+		
 	}
 
 	/** Create default options **/

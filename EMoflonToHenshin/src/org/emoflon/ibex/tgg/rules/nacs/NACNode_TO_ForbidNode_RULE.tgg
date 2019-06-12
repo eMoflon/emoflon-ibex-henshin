@@ -51,43 +51,43 @@
 
 
 
-#complement nodeMapping #for NACNode_TO_ForbidNode_RULE
-
-#source {
-	tggRule: TGGRule {
-		-nacs -> nac
-		-nodes -> tggRNOrig
-	}
-	
-	tggRNOrig: TGGRuleNode
-	
-	tggRN: TGGRuleNode
-	
-	nac: NAC
-}
-
-#target {
-	nodeOrig: Node
-	
-	nestedCond: NestedCondition {
-		++ -mappings -> mapping
-	}
-	
-	++ mapping: Mapping {
-		++ -origin -> nodeOrig
-		++ -image -> node
-	}
-	
-	node: Node
-}
-
-#correspondence {
-	tggRN2n: TGGRuleNodeToNode {
-		#src->tggRNOrig
-		#trg->nodeOrig
-	}
-}
-
-#attributeConditions {
-	eq_string(tggRNOrig.name, tggRN.name)
-}
+//#complement nodeMapping #for NACNode_TO_ForbidNode_RULE
+//
+//#source {
+//	tggRule: TGGRule {
+//		-nacs -> nac
+//		-nodes -> tggRNOrig
+//	}
+//	
+//	tggRNOrig: TGGRuleNode
+//	
+//	tggRN: TGGRuleNode
+//	
+//	nac: NAC
+//}
+//
+//#target {
+//	nodeOrig: Node
+//	
+//	nestedCond: NestedCondition {
+//		++ -mappings -> mapping
+//	}
+//	
+//	++ mapping: Mapping {
+//		++ -origin -> nodeOrig
+//		++ -image -> node
+//	}
+//	
+//	node: Node
+//}
+//
+//#correspondence {
+//	tggRN2n: TGGRuleNodeToNode {
+//		#src->tggRNOrig
+//		#trg->nodeOrig
+//	}
+//}
+//
+//#attributeConditions {
+//	eq_string(tggRNOrig.name, tggRN.name)
+//}

@@ -9,9 +9,7 @@
     editPluginID="org.eclipse.emf.henshin.edit" editorPluginID="org.eclipse.emf.henshin.editor"
     testsPluginID="org.eclipse.emf.henshin.tests" colorProviders="true" runtimeVersion="2.6">
   <foreignModel>henshin.ecore</foreignModel>
-  <genPackages prefix="Henshin" basePackage="org.eclipse.emf" disposableProviderFactory="true"
-      interfacePackageSuffix="model" metaDataPackageSuffix="model" classPackageSuffix="model.impl"
-      utilityPackageSuffix="model.util" ecorePackage="henshin.ecore#/">
+  <genPackages prefix="Henshin" disposableProviderFactory="true" ecorePackage="henshin.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="henshin.ecore#//ParameterKind">
       <genEnumLiterals ecoreEnumLiteral="henshin.ecore#//ParameterKind/UNKNOWN"/>
       <genEnumLiterals ecoreEnumLiteral="henshin.ecore#//ParameterKind/IN"/>
@@ -47,6 +45,7 @@
       <genOperations ecoreOperation="henshin.ecore#//Module/getSubModule">
         <genParameters ecoreParameter="henshin.ecore#//Module/getSubModule/name"/>
       </genOperations>
+      <genOperations ecoreOperation="henshin.ecore#//Module/getAllRules"/>
     </genClasses>
     <genClasses image="false" ecoreClass="henshin.ecore#//Unit">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference henshin.ecore#//Unit/parameters"/>
@@ -239,6 +238,8 @@
     <genClasses ecoreClass="henshin.ecore#//PriorityUnit"/>
     <genClasses ecoreClass="henshin.ecore#//IteratedUnit">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute henshin.ecore#//IteratedUnit/iterations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute henshin.ecore#//IteratedUnit/strict"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute henshin.ecore#//IteratedUnit/rollback"/>
     </genClasses>
     <genClasses ecoreClass="henshin.ecore#//LoopUnit"/>
     <genClasses ecoreClass="henshin.ecore#//Formula">
@@ -263,5 +264,6 @@
     <genClasses ecoreClass="henshin.ecore#//Or"/>
     <genClasses ecoreClass="henshin.ecore#//Xor"/>
     <genClasses ecoreClass="henshin.ecore#//Not"/>
+    <genClasses ecoreClass="henshin.ecore#//True"/>
   </genPackages>
 </genmodel:GenModel>

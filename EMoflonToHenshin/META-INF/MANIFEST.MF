@@ -1,12 +1,16 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: EMoflonToHenshin;singleton:=true
-Bundle-Name: eMoflonToHenshin
+Bundle-Name: %pluginName
 Bundle-Version: 0.0.1
+Bundle-ClassPath: .,
+ jars/
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
 Require-Bundle: org.apache.log4j,
  com.google.guava,
  org.sat4j.core,
  org.sat4j.pb,
- org.eclipse.emf.ecore.xmi,
+ org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.emoflon.ibex.common,
  org.emoflon.ibex.tgg.core.language,
  org.emoflon.ibex.tgg.core.runtime,
@@ -35,9 +39,13 @@ Require-Bundle: org.apache.log4j,
  org.eclipse.ui;bundle-version="3.109.0",
  org.eclipse.gmf.runtime.notation;bundle-version="1.8.0",
  org.eclipse.gmf.runtime.diagram.core;bundle-version="1.7.0",
- org.eclipse.emf.ecore
+ org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport
 Bundle-ManifestVersion: 2
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Automatic-Module-Name: eMoflonToHenshin
-Export-Package: tool
+Automatic-Module-Name: EMoflonToHenshin
+Export-Package: tool,
+ EMoflonToHenshin,
+ EMoflonToHenshin.impl,
+ EMoflonToHenshin.util
