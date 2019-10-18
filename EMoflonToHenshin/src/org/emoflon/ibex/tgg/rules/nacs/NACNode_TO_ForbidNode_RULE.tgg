@@ -50,7 +50,7 @@
 }
 
 
-
+/*
 #complement nodeMapping #for NACNode_TO_ForbidNode_RULE
 
 #source {
@@ -91,3 +91,4 @@
 #attributeConditions {
 	eq_string(tggRNOrig.name, tggRN.name)
 }
+*/

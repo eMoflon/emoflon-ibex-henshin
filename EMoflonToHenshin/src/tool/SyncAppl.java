@@ -29,14 +29,11 @@ public class SyncAppl extends SYNC {
 	private String henshinFilePath;
 
 	/**
-	 * @param tggFilePath
-	 *            - if set, the application will load the TGG model from the
-	 *            specified path. Can be <code>null</code>.
-	 * @param henshinFilePath
-	 *            - if set, the application will load the Henshin model from the
-	 *            specified path. Can be <code>null</code>.
-	 * @param prefs
-	 *            - Preferences
+	 * @param tggFilePath     - if set, the application will load the TGG model from
+	 *                        the specified path. Can be <code>null</code>.
+	 * @param henshinFilePath - if set, the application will load the Henshin model
+	 *                        from the specified path. Can be <code>null</code>.
+	 * @param prefs           - Preferences
 	 * @throws IOException
 	 */
 	public SyncAppl(String tggFilePath, String henshinFilePath, EMoflonToHenshinPrefs prefs) throws IOException {
@@ -55,7 +52,8 @@ public class SyncAppl extends SYNC {
 		else if (prefs.getOperationMode().equals(OperationMode.INIT_BWD))
 			return patternName.endsWith(PatternSuffixes.BWD);
 		else
-			return patternName.endsWith(PatternSuffixes.FWD) || patternName.endsWith(PatternSuffixes.BWD);
+			return patternName.endsWith(PatternSuffixes.FWD) || patternName.endsWith(PatternSuffixes.BWD)
+					|| patternName.endsWith(PatternSuffixes.CONSISTENCY);
 	}
 
 	@Override
