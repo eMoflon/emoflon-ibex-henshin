@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated EMoflonToHenshin -->
+      <package
+            uri="platform:/resource/EMoflonToHenshin/model/EMoflonToHenshin.ecore"
+            class="EMoflonToHenshin.EMoflonToHenshinPackage"
+            genModel="model/EMoflonToHenshin.genmodel"/>
+   </extension>
+
+</plugin>
