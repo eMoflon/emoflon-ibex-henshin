@@ -7,8 +7,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.henshin.model.resource.HenshinResourceFactory;
+import org.emoflon.ibex.tgg.compiler.defaults.IRegistrationHelper;
 import org.emoflon.ibex.tgg.operational.csp.constraints.factories.emoflontohenshin.UserDefinedRuntimeTGGAttrConstraintFactory;
 import org.emoflon.ibex.tgg.operational.defaults.IbexOptions;
+import org.emoflon.ibex.tgg.run.emoflontohenshin.config._DefaultRegistrationHelper;
 
 import language.LanguagePackage;
 import language.TGG;
@@ -18,18 +20,21 @@ import language.TGGRuleNode;
  * Preferences for the classes {@link SyncAppl} and {@link EMoflonToHenshin}.
  */
 public class EMoflonToHenshinPrefs {
+	
+	public static IRegistrationHelper registrationHelper = new _DefaultRegistrationHelper();
 
 	private final String srcResourcePath = "/src.tgg.xmi";
 	private final String trgResourcePath = "/trg.henshin";
 	private final String corrResourcePath = "/corr.xmi";
 	private final String protocolResourcePath = "/protocol.xmi";
 	private final String ecoreResourcePath = "/ecore.xmi";
-	private String instancesFolderPath;
 
 	private static IbexOptions ibexOptions = setIbexOptions();
 	private static EClass tggParamDefClass = LanguagePackage.eINSTANCE.getTGGAttributeConstraintParameterDefinition();
 	private static List<EObject> ecoreClasses = EcorePackage.eINSTANCE.eContents();
 
+	private String instancesFolderPath;
+	
 	private Consumer<TGG> preProcessor;
 
 	private boolean saveModels;
@@ -49,7 +54,6 @@ public class EMoflonToHenshinPrefs {
 
 	public EMoflonToHenshinPrefs() {
 		setInstancesFolderPath("/instances");
-		setIbexOptions();
 		setPreprocessing(null);
 		setSaveModels(true);
 		setOperationMode(OperationMode.INIT_FWD);
@@ -57,13 +61,13 @@ public class EMoflonToHenshinPrefs {
 	}
 
 	private static IbexOptions setIbexOptions() {
-		IbexOptions options = new IbexOptions();
-		options.projectName("EMoflonToHenshin");
-		options.projectPath("eMoflonToHenshin");
-		options.debug(false);
-		options.userDefinedConstraints(new UserDefinedRuntimeTGGAttrConstraintFactory());
-		options.ignoreDomainConformity(true);
-		options.ignoreInjectivity((node0, node1) -> ignoreInjectivityRules(node0, node1));
+		IbexOptions options = registrationHelper.createIbexOptions();
+		options.project.name("EMoflonToHenshin");
+		options.project.path("eMoflonToHenshin");
+		options.debug.ibexDebug(false);
+		options.csp.userDefinedConstraints(new UserDefinedRuntimeTGGAttrConstraintFactory());
+		options.patterns.ignoreDomainConformity(true);
+		options.patterns.ignoreInjectivity((node0, node1) -> ignoreInjectivityRules(node0, node1));
 		return options;
 	}
 

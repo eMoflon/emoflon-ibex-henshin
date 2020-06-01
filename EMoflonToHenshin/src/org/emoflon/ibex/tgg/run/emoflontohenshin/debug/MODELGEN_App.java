@@ -2,22 +2,15 @@ package org.emoflon.ibex.tgg.run.emoflontohenshin.debug;
 
 import java.io.IOException;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
-
-import org.emoflon.ibex.tgg.operational.defaults.IbexOptions;
-
 import org.emoflon.ibex.tgg.compiler.defaults.IRegistrationHelper;
-import org.emoflon.ibex.tgg.operational.strategies.modules.TGGResourceHandler;
-
-import org.emoflon.ibex.tgg.ui.debug.adapter.TGGAdapter.IBeXOperation;
-import org.emoflon.ibex.tgg.ui.debug.adapter.TGGAdapter.VictoryIBeXAdapter;
-
-import org.emoflon.ibex.tgg.run.emoflontohenshin.config.*;
-
 import org.emoflon.ibex.tgg.operational.strategies.gen.MODELGEN;
 import org.emoflon.ibex.tgg.operational.strategies.gen.MODELGENStopCriterion;
+import org.emoflon.ibex.tgg.run.emoflontohenshin.config._DefaultRegistrationHelper;
+import org.emoflon.ibex.tgg.ui.debug.adapter.TGGAdapter.IBeXOperation;
+import org.emoflon.ibex.tgg.ui.debug.adapter.TGGAdapter.VictoryIBeXAdapter;
 
 public class MODELGEN_App extends MODELGEN {
 

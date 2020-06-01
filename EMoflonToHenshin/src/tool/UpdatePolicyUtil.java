@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.emoflon.ibex.tgg.operational.matches.IMatch;
+import org.emoflon.ibex.tgg.operational.matches.ITGGMatch;
 import org.emoflon.ibex.tgg.operational.matches.ImmutableMatchContainer;
 import org.emoflon.ibex.tgg.operational.updatepolicy.IUpdatePolicy;
 
@@ -17,8 +17,8 @@ class UpdatePolicyUtil {
 	UpdatePolicyUtil() {
 		this.updatePolicy = new IUpdatePolicy() {
 			@Override
-			public IMatch chooseOneMatch(ImmutableMatchContainer matchContainer) {
-				List<IMatch> rankedMatches = getRankedMatches(matchContainer.getMatches());
+			public ITGGMatch chooseOneMatch(ImmutableMatchContainer matchContainer) {
+				List<ITGGMatch> rankedMatches = getRankedMatches(matchContainer.getMatches());
 				if (rankedMatches.isEmpty())
 					return matchContainer.getNext();
 				return rankedMatches.get(0);
@@ -26,14 +26,14 @@ class UpdatePolicyUtil {
 		};
 	}
 
-	private List<IMatch> getRankedMatches(Set<IMatch> matches) {
-		LinkedList<IMatch> rankedMatches = new LinkedList<>();
+	private List<ITGGMatch> getRankedMatches(Set<ITGGMatch> matches) {
+		LinkedList<ITGGMatch> rankedMatches = new LinkedList<>();
 
-		LinkedList<IMatch> baseMatches = new LinkedList<>();
-		LinkedList<IMatch> litEnumOtherMatches = new LinkedList<>();
-		LinkedList<IMatch> litEnumEqMatches = new LinkedList<>();
+		LinkedList<ITGGMatch> baseMatches = new LinkedList<>();
+		LinkedList<ITGGMatch> litEnumOtherMatches = new LinkedList<>();
+		LinkedList<ITGGMatch> litEnumEqMatches = new LinkedList<>();
 
-		for (IMatch match : matches) {
+		for (ITGGMatch match : matches) {
 			if (contains(UpdatePolicyData.BASE_RULES, match))
 				baseMatches.add(match);
 			else if (contains(UpdatePolicyData.LIT_ENUM_OTHER_RULES, match))
@@ -54,7 +54,7 @@ class UpdatePolicyUtil {
 		return rankedMatches;
 	}
 
-	private boolean contains(Set<String> set, IMatch match) {
+	private boolean contains(Set<String> set, ITGGMatch match) {
 		return set.contains(match.getRuleName());
 	}
 

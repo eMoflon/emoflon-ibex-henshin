@@ -2,25 +2,50 @@ package org.emoflon.ibex.tgg.run.emoflontohenshin;
 
 import java.io.IOException;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
-
-import org.emoflon.ibex.tgg.operational.defaults.IbexOptions;
+import org.emoflon.ibex.tgg.compiler.defaults.IRegistrationHelper;
 import org.emoflon.ibex.tgg.operational.strategies.gen.MODELGEN;
 import org.emoflon.ibex.tgg.operational.strategies.gen.MODELGENStopCriterion;
-import org.emoflon.ibex.tgg.runtime.engine.DemoclesTGGEngine;
+import org.emoflon.ibex.tgg.operational.strategies.modules.TGGResourceHandler;
+import org.emoflon.ibex.tgg.run.emoflontohenshin.config._DefaultRegistrationHelper;
 
 public class MODELGEN_App extends MODELGEN {
 
+	// eMoflon supports other pattern matching engines. Replace _DefaultRegistrationHelper with one of the other registrationHelpers from the *.config-package to choose between them. Default: Democles 
+	public static IRegistrationHelper registrationHelper = new _DefaultRegistrationHelper();
+
 	public MODELGEN_App() throws IOException {
-		super(createIbexOptions());
-		registerBlackInterpreter(new DemoclesTGGEngine());
+		super(registrationHelper.createIbexOptions().resourceHandler(new TGGResourceHandler() {
+			@Override
+			public void saveModels() throws IOException {
+				// Use the commented code below to implement saveModels individually.
+				// source.save(null);
+				// target.save(null);
+				// corr.save(null);
+				// protocol.save(null);
+				
+				super.saveModels();
+			}
+			
+			@Override
+			public void loadModels() throws IOException {
+				// Use the commented code below to implement loadModels individually.
+				// loadResource loads from a file while createResource creates a new resource without content
+				// source = loadResource(options.project.path() + "/instances/src.xmi");
+				// target = createResource(options.project.path() + "/instances/trg.xmi");
+				// corr = createResource(options.project.path() + "/instances/corr.xmi");
+				// protocol = createResource(options.project.path() + "/instances/protocol.xmi");
+				
+				super.loadModels();
+			}
+		}));
 	}
 
 	public static void main(String[] args) throws IOException {
 		BasicConfigurator.configure();
-		Logger.getRootLogger().setLevel(Level.DEBUG);
+		Logger.getRootLogger().setLevel(Level.INFO);
 
 		logger.info("Starting MODELGEN");
 		long tic = System.currentTimeMillis();
@@ -29,13 +54,6 @@ public class MODELGEN_App extends MODELGEN {
 		logger.info("Completed init for MODELGEN in: " + (toc - tic) + " ms");
 		
 		MODELGENStopCriterion stop = new MODELGENStopCriterion(generator.getTGG());
-		// --------------------- My Code ---------------------
-		stop.setMaxRuleCount("TGG_TO_Module_RULE", 1);
-		stop.setMaxRuleCount("TGGRule_TO_Rule_RULE", 1);
-		stop.setMaxRuleCount("TGGRuleNode_TO_Node_Con_RULE", 1);
-		//stop.setMaxRuleCount("test", 1);
-		stop.setMaxRuleCount("TGGRuleNode_TO_Node_Cre_RULE", 1);
-		// ------------------- END My Code -------------------
 		stop.setTimeOutInMS(1000);
 		generator.setStopCriterion(stop);
 		
@@ -46,18 +64,5 @@ public class MODELGEN_App extends MODELGEN {
 		
 		generator.saveModels();
 		generator.terminate();
-	}
-	
-	
-	@Override
-	protected void registerUserMetamodels() throws IOException {
-		_RegistrationHelper.registerMetamodels(rs, this);
-			
-		// Register correspondence metamodel last
-		loadAndRegisterCorrMetamodel(options.projectPath() + "/model/" + options.projectName() + ".ecore");
-	}
-	
-	private static IbexOptions createIbexOptions() {
-		return _RegistrationHelper.createIbexOptions();
 	}
 }

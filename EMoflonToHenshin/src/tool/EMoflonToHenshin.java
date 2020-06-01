@@ -112,10 +112,10 @@ public class EMoflonToHenshin {
 	}
 
 	private EList<EObject> getSrcContents() {
-		return sync.getSourceResource().getContents();
+		return sync.getResourceHandler().getSourceResource().getContents();
 	}
 
 	private EList<EObject> getTrgContents() {
-		return sync.getTargetResource().getContents();
+		return sync.getResourceHandler().getTargetResource().getContents();
 	}
 }

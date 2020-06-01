@@ -2,17 +2,13 @@ package org.emoflon.ibex.tgg.run.emoflontohenshin;
 
 import java.io.IOException;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
-
 import org.emoflon.ibex.tgg.compiler.defaults.IRegistrationHelper;
-import org.emoflon.ibex.tgg.operational.strategies.modules.TGGResourceHandler;
-
-import org.emoflon.ibex.tgg.run.emoflontohenshin.config.*;
-
-import org.emoflon.ibex.tgg.operational.defaults.IbexOptions;
 import org.emoflon.ibex.tgg.operational.strategies.integrate.INTEGRATE;
+import org.emoflon.ibex.tgg.operational.strategies.modules.TGGResourceHandler;
+import org.emoflon.ibex.tgg.run.emoflontohenshin.config._DefaultRegistrationHelper;
 
 public class INTEGRATE_App extends INTEGRATE {
 

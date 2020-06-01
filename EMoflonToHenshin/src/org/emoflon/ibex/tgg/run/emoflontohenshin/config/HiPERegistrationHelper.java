@@ -5,8 +5,10 @@ import java.io.IOException;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.impl.EcorePackageImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.henshin.model.impl.HenshinPackageImpl;
 import org.emoflon.ibex.tgg.operational.csp.constraints.factories.emoflontohenshin.UserDefinedRuntimeTGGAttrConstraintFactory;
 import org.emoflon.ibex.tgg.operational.defaults.IbexOptions;
 import org.emoflon.ibex.tgg.operational.strategies.modules.IbexExecutable;
@@ -17,8 +19,7 @@ import org.emoflon.ibex.tgg.compiler.defaults.IRegistrationHelper;
 
 import EMoflonToHenshin.EMoflonToHenshinPackage;
 import EMoflonToHenshin.impl.EMoflonToHenshinPackageImpl;
-import <<SRC_Package>>.impl.<<SRC_Package>>PackageImpl;
-import <<TRG_Package>>.impl.<<TRG_Package>>PackageImpl;
+import language.impl.LanguagePackageImpl;
 
 public class HiPERegistrationHelper implements IRegistrationHelper {
 	
@@ -37,13 +38,18 @@ public class HiPERegistrationHelper implements IRegistrationHelper {
 		setWorkspaceRootDirectory(rs);
 		
 		// Load and register source and target metamodels
-		EPackage <<src_project>>Pack = null;
-		EPackage <<trg_project>>Pack = null;
+		EPackage languagePack = null;
+		EPackage henshinPack = null;
+		EPackage ecorePack = null;
 		EPackage emoflontohenshinPack = null;
 		
 		if(executable instanceof FWD_OPT) {
-			Resource res = executable.getResourceHandler().loadResource("platform:/resource/<<TRG_Project>>/model/<<TRG_Project>>.ecore");
-			<<trg_project>>Pack = (EPackage) res.getContents().get(0);
+			Resource res = executable.getResourceHandler().loadResource("platform:/resource/org.eclipse.emf.henshin.model/model/henshin.ecore");
+			henshinPack = (EPackage) res.getContents().get(0);
+			rs.getResources().remove(res);
+			
+			res = executable.getResourceHandler().loadResource("http://www.eclipse.org/emf/2002/Ecore");
+			ecorePack = (EPackage) res.getContents().get(0);
 			rs.getResources().remove(res);
 			
 			res = executable.getResourceHandler().loadResource("platform:/resource/EMoflonToHenshin/model/EMoflonToHenshin.ecore");
@@ -52,8 +58,12 @@ public class HiPERegistrationHelper implements IRegistrationHelper {
 		}
 				
 		if(executable instanceof BWD_OPT) {
-			Resource res = executable.getResourceHandler().loadResource("platform:/resource/<<SRC_Project>>/model/<<SRC_Project>>.ecore");
-			<<src_project>>Pack = (EPackage) res.getContents().get(0);
+			Resource res = executable.getResourceHandler().loadResource("platform:/plugin/org.emoflon.ibex.tgg.language/model/Language.ecore");
+			languagePack = (EPackage) res.getContents().get(0);
+			rs.getResources().remove(res);
+			
+			res = executable.getResourceHandler().loadResource("http://www.eclipse.org/emf/2002/Ecore");
+			ecorePack = (EPackage) res.getContents().get(0);
 			rs.getResources().remove(res);
 			
 			res = executable.getResourceHandler().loadResource("platform:/resource/EMoflonToHenshin/model/EMoflonToHenshin.ecore");
@@ -61,11 +71,14 @@ public class HiPERegistrationHelper implements IRegistrationHelper {
 			rs.getResources().remove(res);
 		}
 
-		if(<<src_project>>Pack == null)
-			<<src_project>>Pack = <<SRC_Package>>PackageImpl.init();
+		if(languagePack == null)
+			languagePack = LanguagePackageImpl.init();
 				
-		if(<<trg_project>>Pack == null)
-			<<trg_project>>Pack = <<TRG_Package>>PackageImpl.init();
+		if(henshinPack == null)
+			henshinPack = HenshinPackageImpl.init();
+		
+		if(ecorePack == null)
+			ecorePack = EcorePackageImpl.init();
 		
 		if(emoflontohenshinPack == null) {
 			emoflontohenshinPack = EMoflonToHenshinPackageImpl.init();
@@ -73,11 +86,13 @@ public class HiPERegistrationHelper implements IRegistrationHelper {
 			rs.getPackageRegistry().put("platform:/plugin/EMoflonToHenshin/model/EMoflonToHenshin.ecore", EMoflonToHenshinPackage.eINSTANCE);
 		}
 			
-		rs.getPackageRegistry().put("platform:/resource/<<SRC_Project>>/model/<<SRC_Project>>.ecore", <<src_project>>Pack);
-	    rs.getPackageRegistry().put("platform:/plugin/<<SRC_Project>>/model/<<SRC_Project>>.ecore", <<src_project>>Pack);	
+		rs.getPackageRegistry().put("platform:/resource/org.emoflon.ibex.tgg.language/model/Language.ecore", languagePack);
+	    rs.getPackageRegistry().put("platform:/plugin/org.emoflon.ibex.tgg.language/model/Language.ecore", languagePack);	
 			
-		rs.getPackageRegistry().put("platform:/resource/<<TRG_Project>>/model/<<TRG_Project>>.ecore", <<trg_project>>Pack);
-		rs.getPackageRegistry().put("platform:/plugin/<<TRG_Project>>/model/<<TRG_Project>>.ecore", <<trg_project>>Pack);
+		rs.getPackageRegistry().put("platform:/resource/org.eclipse.emf.henshin.model/model/henshin.ecore", henshinPack);
+		rs.getPackageRegistry().put("platform:/plugin/org.eclipse.emf.henshin.model/model/henshin.ecore", henshinPack);
+		
+		rs.getPackageRegistry().put("http://www.eclipse.org/emf/2002/Ecore", henshinPack);
 	}
 
 	/** Create default options **/
